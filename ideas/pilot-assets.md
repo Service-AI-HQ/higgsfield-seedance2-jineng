@@ -94,3 +94,68 @@ For a showreel that has to look expensive, 2.0 at 1080p likely beats 2.5 at
 720p, and 2.0 is the one flagged for unlimited. 2.5 wins only if the 30-second
 continuous take or extension chaining is needed — and at 4–8s per shot, this
 project does not need either.
+
+---
+
+# Stage 2 — Start frames (21 shots)
+
+| Shot | Frame job ID | Model |
+|---|---|---|
+| 1 alarm | `99d3d1b2-ee17-4d46-a007-d43119486a01` | seedream_v5_pro |
+| 3 laminating | `8f1be848-5f07-4763-9eae-f2986e89cd46` | nano_banana_flash |
+| 5 empty shop | `2bd7c379-1709-4b08-aa3c-152a6a4cb24f` | nano_banana_flash |
+| 6 "you should post them" | `19be3418-d2e3-4239-b02a-39e111df175d` | nano_banana_flash |
+| 7 three likes | `a8f99344-8b04-44a1-a9a7-bdac9fe05e1c` | nano_banana_flash |
+| 8 the comment | `62fb2771-9aeb-4ba5-a766-9ae3aab0edb3` | seedream_v5_pro |
+| 9 her face | `599a4628-2d9e-432a-aacd-3056a4574b33` | nano_banana_flash |
+| 10 "KINDA?!" | `c6fe0d6b-427f-450e-b381-0f57b5f608cb` | nano_banana_flash |
+| 11 car storytime | `d9b33bb8-e50e-43d3-b5ac-fec3fafcd784` | nano_banana_flash |
+| 12 false fix | `5b2402f8-ccae-4d97-aff5-2f576298ad78` | nano_banana_flash |
+| 13 the crate | `d8e8ab62-0687-4960-af3b-2c5a45d60638` | nano_banana_flash |
+| 14 the envelope | `5756465d-dbeb-420e-b776-b507e98fb738` | nano_banana_flash |
+| 15 the laugh | `72c74116-f3de-4737-b49e-1e67ef90c9db` | nano_banana_flash |
+| 16 painting the sign | `b93ab0c3-e305-40ce-8e42-cef5856070cd` | nano_banana_flash |
+| 17 the stamp | `122c066b-85f6-4e12-a4a7-5e85e233f196` | seedream_v5_pro |
+| 18 the queue | `5e299172-02e9-4d3c-9795-3dbb8cd5a6a9` | nano_banana_flash |
+| 19 Deborah arrives | `61a71947-4ed6-4811-a8b4-205ac1432956` | nano_banana_flash |
+| 20 "on the house" | `b92a320d-618c-4c8a-92a4-6cdf5411426e` | nano_banana_flash |
+| 21 sign at night | `7ed69752-9d82-420e-b192-36c58e53c06e` | nano_banana_flash |
+
+Shots 2 and 4 still outstanding.
+
+# Stage 3 — Video jobs (Seedance 2.5, omni_reference, 720p, high bitrate)
+
+| Shot | Video job ID | Dur | Native audio |
+|---|---|---|---|
+| 1 | `b20db888-2f29-48c5-ba86-5b498dcaac2c` | 5s | yes |
+| 3 | `004e0f02-9d11-4bd6-b17b-9b6c089f0ded` | 8s | yes |
+| 5 | `fa189ecf-4b27-41a5-977d-1bdea97065f8` | 6s | yes |
+| 6 | `ecd764ff-8fbe-403c-9b0f-c344782fa5a5` | 6s | no |
+| 7 | `20c4a3ba-ba6f-4bcc-9939-dabf553a0cb6` | 5s | yes |
+| 8 | `d5e024f4-c5e7-49d5-888e-54cf284ef71f` | 5s | yes |
+| 9 | `5fcc541c-64c1-458f-baf2-9c91ab87bd4a` | 6s | no |
+| 10 | `6a2925cc-604c-49c0-9a3b-3b82798868bb` | 7s | no |
+| 11 | `179c4860-52e0-4dba-ba55-57d2d2c2c45d` | 8s | no |
+| 12 | `c882e63f-a442-41fe-91fa-7e296423c309` | 7s | yes |
+| 13 | `68a5a054-2450-48f7-bf2e-39bed18a3db9` | 7s | yes |
+| 14 | `8e762ddd-cad4-449d-85dc-7f34820b40e7` | 5s | yes |
+
+Dialogue shots (6, 9, 10, 11) generated silent — real voice goes on in the edit
+so comic timing stays an editing decision, not a generation lottery.
+
+## Platform behaviours hit during stage 2
+
+**Model substitution cascades.** `nano_banana_pro` → `nano_banana_2` →
+`nano_banana_flash`. Requesting a tier does not get that tier; check the `model`
+field on every returned job rather than trusting the request.
+
+**False-positive NSFW rejections on `nano_banana_flash`.** 8 of 21 frames were
+rejected, including a phone on a table, a rubber stamp on a box, and a queue of
+customers — no people in several of them. Rewriting the prompts did not help.
+Rerouting the same prompts to `seedream_v5_pro` cleared every one, which locates
+the fault in the flash model's classifier rather than in the content.
+
+**Preset interception on video submission.** 3 of 12 video jobs returned
+`submission_failed` with a preset recommendation ("IN THE DARK") instead of
+running. Fix is resubmitting with `declined_preset_id` set to the recommended
+preset. Worth expecting on any dark or low-light shot.
