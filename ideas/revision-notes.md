@@ -187,3 +187,49 @@ explicitly authorises spending the remaining balance for something the browser
 cannot do.
 
 **Remaining balance: 1,472 credits.** Preserve it.
+
+---
+
+# ROOT CAUSE OF THE AUDIO: Seedance invents its own dialogue
+
+A spectrogram of shot 20's native audio settled it. The first 2.4 seconds show
+evenly-spaced harmonic bands from ~200 Hz to 4800 Hz with visible vibrato —
+the signature of **a sustained human voice singing**, not room tone and not
+laughter. The prompt asked only for "warm layered laughter, no intelligible
+speech."
+
+`generate_audio: true` does not mean "give me ambience." It means the model
+writes and performs its own audio track, **including invented vocal
+performances**, on top of whatever the prompt asked for. Fourteen shots carried
+one. Then TTS dialogue went over the top of them.
+
+That is why the audio "doesn't make sense": on several shots **two different
+voices are singing two different things simultaneously.** No amount of level
+balancing or ducking fixes that, which is why the v2 mix pass — unified room
+tone, sidechain ducking, −14 LUFS — improved the polish and left the actual
+problem untouched.
+
+## The fix
+
+**Strip every native audio track (`-an`) and build the soundtrack from
+nothing.** v3 does this:
+
+| Element | Source | Cost |
+|---|---|---|
+| Store bed | pink noise + 100/200 Hz ballast hum | free, synthesised |
+| Store-night bed | brown noise + 62 Hz compressor | free |
+| Kitchen bed | filtered brown noise | free |
+| Rain bed | white noise, tremolo-modulated | free |
+| Music | four sine-triad chords, slow swell, echo | free |
+| Telephone bell | dual sine + 22 Hz tremolo | free |
+| Dialogue | existing ElevenLabs takes | already paid |
+
+Entire soundtrack rebuilt for **zero credits**. Synthesised beds also beat
+generated ones for this job: they are perfectly consistent, loop cleanly, and
+carry no risk of a model hallucinating a voice into them.
+
+## Rule for all future generation
+
+**Always set `generate_audio: false`.** Native audio is unusable in a film with
+its own dialogue — it will invent competing performances. Design sound in the
+edit, where it can be controlled.
