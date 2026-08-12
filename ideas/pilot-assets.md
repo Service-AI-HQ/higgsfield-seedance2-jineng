@@ -205,3 +205,50 @@ At that rate the remaining balance funds roughly **two more stories** end to
 end. Cutting the waste (routing stills to nano_banana first, expecting the
 preset interception, anchoring environments correctly) should bring the next
 one in cheaper.
+
+---
+
+# LOOKS DRY — FINAL CUT
+
+**`LOOKS_DRY_v2.mp4` — 1:36.03, 720×1280, all 21 shots.**
+
+Shot 6 replaced with the corrected version (job `470d849a-291c-44b4-8998-3ec556612a38`),
+shots 2 and 4 added, act one tightened by ~3s across five shots so the two new
+shots did not simply inflate the runtime.
+
+## The environment-drift fix, confirmed
+
+Side-by-side of old shot 6 / new shot 6 / shot 10 shows the correction worked:
+the corrected shot now shares the white walls, tall street window, glass display
+case, card reader, straw jar and chalkboard with shot 10. **The fix was ordering
+the media references so the environment comes first, plus an explicit "do not
+change the room" instruction.** With character references listed first, they
+dominate and the model reinvents the location. This is the single most useful
+production rule learned from the pilot.
+
+## Assembly recipe (reusable)
+
+1. Trim each clip to screen time — plan on using ~60% of what is generated.
+2. Normalise everything to 720×1280 @ 24fps.
+3. Give silent clips a null audio bed (`anullsrc`) so the concat demuxer sees a
+   uniform stream layout — mixed audio/no-audio inputs break `-c copy` concat.
+4. Concat, then mix dialogue at absolute offsets with `adelay` + `amix`, ending
+   in `alimiter` to stop the sum clipping.
+5. Pass `-nostdin` to every ffmpeg call inside a shell loop, or ffmpeg swallows
+   the loop's input and the iteration silently corrupts.
+
+---
+
+# THE COMMERCIAL — Stage 1
+
+| Asset | Job ID | Model |
+|---|---|---|
+| **Dale** | `1a0563da-582f-4286-ab91-18c824a0f659` | nano_banana_flash |
+| **Carol** | `bd3c127a-22fe-47b1-93f9-f22657a04b3d` | nano_banana_flash |
+| Hardware store interior | `34590c87-268a-4c08-9295-391f144bbbb0` | seedream_v5_pro |
+| Kitchen table, 11pm | `bb5b8e84-3626-45e2-882a-dfec4f5a1ed2` | seedream_v5_pro |
+| Car park, rain | `51adcfda-6e9b-4ffa-8c23-89e90ee9c205` | seedream_v5_pro |
+
+Dale landed first pass — weathered ruddy skin, broken capillaries, sun damage,
+tape measure on the belt, and an open earnest face. The comedy only works if he
+is lovable rather than foolish, and the casting carries that.
