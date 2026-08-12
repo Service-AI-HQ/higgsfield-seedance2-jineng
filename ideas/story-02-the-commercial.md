@@ -130,3 +130,39 @@ the selection governs what all subsequent operations bill against, but it was
 
 Submit video in waves of ~5 and drain before the next wave. Image batches of 12
 were never throttled — the cap applies to video only.
+
+---
+
+# DELIVERED — `THE_COMMERCIAL.mp4`, 1:45.03, 21/21 shots, 7/7 dialogue takes
+
+## Cost
+
+Balance 2,301.89 → **1,472.19 = ~830 credits**, against ~1,099 for LOOKS DRY.
+A 25% saving on a film with the same shot count, entirely from not repeating
+the pilot's mistakes:
+
+- **Zero NSFW rejections** (8 of 21 last time). Listing the environment
+  reference first appears to settle the classifier as well as the room.
+- **Zero continuity redos** (one last time).
+- **Zero wasted seedream calls** on shots nano_banana could carry.
+
+## What the environment-first rule bought
+
+Every one of the 15 hardware-store shots shares the same shelving, the same
+service counter, the same fluorescent tubes with the one dimmer tube, and the
+same front window. Across 15 separate generations the room never drifted once.
+On the pilot, one shot out of 21 relocated to a different building — and that
+was with fewer location-heavy setups.
+
+## Reusable assembler
+
+`tools/assemble.py` — skips any shot whose clip is missing, so it can be run
+partway through production and again when the remaining renders land. It
+recomputes dialogue offsets from the shots actually present, which means the
+lines stay glued to their scenes no matter how much of the film exists yet.
+Used mid-production here to cut a 15-shot / 1:14 assembly while six shots were
+still rendering.
+
+## Remaining budget
+
+**1,472 credits** — roughly one more film at the improved ~830 rate.
