@@ -15,7 +15,8 @@ generations — pass the job_id as the media value, not the URL.
 
 | # | Asset | Job ID | Status |
 |---|---|---|---|
-| 4 | Kitchen, 4am | `18437599-00d4-4aa9-9fc9-51193eb36ca3` | **Flagged — reads too derelict** |
+| 4 | Kitchen, 4am (v1) | `18437599-00d4-4aa9-9fc9-51193eb36ca3` | Superseded — read too derelict |
+| 7 | **Kitchen, 4am (v2)** | `fd0b857f-a9ac-4362-ad05-e6e1661e8ea2` | Approved candidate — 4K, clean-worn |
 | 5 | Shop front | `897946c5-41d3-4402-af82-623ca585693a` | Approved candidate |
 | 6 | Car interior | `858a67b2-3f19-4590-820b-23291483e3df` | Approved candidate |
 
@@ -57,8 +58,39 @@ control, video on web where 2.5 is unlimited — pending an explicit `use_unlim`
 test on one video generation, which fails as a typed rejection rather than a
 silent charge.
 
-## Model substitution
+## Model substitution — confirmed, not overridable
 
-`nano_banana_pro` was requested for the character sheets; the backend ran
-`nano_banana_2`. Results are strong so it isn't worth fighting, but worth
-knowing the requested model isn't always the one that runs.
+`nano_banana_pro` was requested twice, explicitly, on separate calls. Both times
+the backend ran **`nano_banana_2`**. This is a server-side substitution that
+cannot be forced from the MCP surface. Results are strong, and the `resolution:
+"4k"` parameter *does* take effect regardless (kitchen v2 returned
+3072×5504), so the practical loss is small — but Pro is not what runs.
+
+## Per-model cost, derived from balance deltas
+
+| Model | Approx credits | Note |
+|---|---|---|
+| `nano_banana_2` @ 4k | **~4** | Kitchen v2: 3252.44 → 3248.44 |
+| `seedream_v5_pro` @ 2k | **~50** | Back-solved from the 161-credit first batch |
+
+Seedream was consuming almost the entire first batch. **Use nano_banana for
+everything** — roughly 12× cheaper at equal or better resolution. The 21 start
+frames land near 85 credits rather than ~1,000, which removes stills from the
+budget risk entirely. Video remains the expensive stage and the open question.
+
+## Model choice still open: 2.5 vs 2.0
+
+There is no "Seedance 2.5 Pro" — the catalog search returns nothing. The real
+tradeoff:
+
+| | `seedance_2_5` | `seedance_2_0` |
+|---|---|---|
+| Resolution | 480p / **720p max** | 480p / 720p / 1080p / **4K** (mode `std`) |
+| Duration | 4–30s | 4–15s |
+| Modes | t2v, omni_reference, video_edit, video_extension | reference-driven only |
+| `supports_unlim` | **no** | **yes** |
+
+For a showreel that has to look expensive, 2.0 at 1080p likely beats 2.5 at
+720p, and 2.0 is the one flagged for unlimited. 2.5 wins only if the 30-second
+continuous take or extension chaining is needed — and at 4–8s per shot, this
+project does not need either.
