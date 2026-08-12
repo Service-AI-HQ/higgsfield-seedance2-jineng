@@ -159,3 +159,49 @@ the fault in the flash model's classifier rather than in the content.
 `submission_failed` with a preset recommendation ("IN THE DARK") instead of
 running. Fix is resubmitting with `declined_preset_id` set to the recommended
 preset. Worth expecting on any dark or low-light shot.
+
+---
+
+# Stage 4 — First rough cut delivered
+
+**`LOOKS_DRY_roughcut.mp4` — 1:30.53, 720×1280, 19 shots, dialogue mixed.**
+
+Assembled locally with ffmpeg (installed via `imageio-ffmpeg`; the Adobe MCP is
+not reachable from this session). Each source clip trimmed to its screen time,
+normalised to 720×1280 @ 24fps, silent shots given a null audio bed so the
+concat demuxer has a uniform stream layout, then six ElevenLabs dialogue takes
+mixed in at fixed offsets.
+
+## Dialogue takes (text2speech_v2, elevenlabs variant)
+
+| Line | Voice | Offset |
+|---|---|---|
+| "You should post them." | Dylan (Miles) | 14.60s |
+| "Does that look dry to you?" | Maeve (Renée) | 30.20s |
+| "…kinda?" | Dylan | 32.70s |
+| "Kinda?!" | Maeve | 34.30s |
+| "It's a croissant, Deborah. They're supposed to be flaky." | Maeve | 37.60s |
+| "It's on the house." | Maeve | 83.20s |
+
+Voices are Higgsfield presets through the ElevenLabs engine — the user's own
+ElevenLabs account and cloned voices are not reachable from this session.
+
+## Continuity defect found and fixed
+
+Shot 6 generated in a **different bakery** — brick walls and bread racks instead
+of the white-walled shop front with the display case. Shot 10 plays in the same
+scene minutes later and used the correct room, so the two cut together as a
+continuity break. Cause: the character references outweighed the environment
+reference. Fix: regenerate with the environment reference listed **first** and
+an explicit "do not change the room" instruction. Re-rendering as shot 62.
+
+## Cost of one 90-second film
+
+Balance 3,413.44 → 2,314.89 = **~1,099 credits** for the complete pilot: 24
+images, 22 video generations, 6 audio takes, including all retries and the
+8 NSFW false positives that had to be rerouted.
+
+At that rate the remaining balance funds roughly **two more stories** end to
+end. Cutting the waste (routing stills to nano_banana first, expecting the
+preset interception, anchoring environments correctly) should bring the next
+one in cheaper.
