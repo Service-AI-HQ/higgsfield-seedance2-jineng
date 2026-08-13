@@ -72,3 +72,48 @@ in-scene voice rather than narration laid over a finished cut.
 Whichever engine renders it, generate **3 takes per line** with the delivery
 direction written into the prompt, and pick. The difference between a read and a
 performance is entirely in that step, and it was skipped on the dialogue.
+
+---
+
+# Status — VO blocked on connector, not on craft
+
+The narration was submitted to OpenArt and paid for:
+
+- **historyId** `Bgu28Fy4K6O61I94BiWC`
+- Seedance 2.5, text2video, 30s, 9:16, 480p, `generateAudio: true`, seed `20260812`
+- **1,810 credits** (21,194 → ~19,384)
+
+It could not be collected. `mcp__Openart__*` was absent across **four** scheduled
+retrieval attempts over ~90 minutes, while ten other MCP servers dropped and
+reconnected repeatedly in the same window. The job itself is fine — it is in the
+account's OpenArt history and the credits are spent either way. This is purely a
+retrieval problem.
+
+## Two ways past it
+
+1. **A direct file URL.** Open the job in OpenArt's history, copy the download
+   link, paste it. `curl` does not need the connector, so this bypasses the
+   problem entirely and the rebuild takes minutes.
+2. **A real TTS connector.** ElevenLabs on the user's own account would render
+   all ten lines, with voice selection and consistent delivery, for a fraction of
+   one 1,810-credit video generation — and would also cover LOOKS DRY's spine and
+   the directed dialogue re-takes both films still want.
+
+## Why narration-from-a-video-model was always the weak link
+
+It is off-label use. A video model asked for narration may return the wrong age,
+an announcer read, booth ambience printed into the take, or simply fail to speak
+all ten lines in the time available — and each attempt costs 1,810 credits with
+no way to audition before paying. Standalone TTS costs cents per take and lets
+you pick the voice first. The video-model route was a workaround for not having
+a TTS route, and it is the single weakest link in the pipeline.
+
+## Ready and waiting
+
+- `assets/endcard/serviceaihq-endcard.png` — the end card frame
+- `scratchpad/commercial/insert/endcard.mp4` — 4s, silent, fades up and out
+- `scratchpad/commercial/cut3/` — film with native audio stripped, synthesised
+  location beds, music at the turn, phone foley, existing dialogue
+
+The moment the VO audio exists in any form, it drops into that cut and the film
+is finished.
