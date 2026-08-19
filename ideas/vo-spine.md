@@ -117,3 +117,51 @@ a TTS route, and it is the single weakest link in the pipeline.
 
 The moment the VO audio exists in any form, it drops into that cut and the film
 is finished.
+
+---
+
+# COLLECTED AND CUT — v4 delivered
+
+OpenArt reattached and the render came back COMPLETED. Verified before use:
+
+| Check | Result | Verdict |
+|---|---|---|
+| Speech segments | **10**, cleanly separable | matches the script exactly |
+| Median F0 | **105.5 Hz** | male, mature register (announcer reads sit 130-150) |
+| F0 spread across lines | 93-118 Hz | one speaker throughout |
+| Noise floor between lines | **-67.6 dBFS RMS** | no booth ambience |
+| Peaks | -2 to -5 dBFS | healthy, unclipped |
+
+The single-30s-take decision is what produced that F0 consistency. Ten separate
+generations would have given ten voices, and Gemini - the cheaper option per
+second - exposes no seed to hold one.
+
+The pitch **drops** on lines 5 and 6 ("...telling them *properly*" / "nobody
+wants properly") to 93-95 Hz, against 112-118 Hz on the opening lines. The wry
+edge written into the delivery direction shows up in the measurement.
+
+## Placement decisions
+
+The narration leads and the scene dialogue answers it, so nothing talks over
+anything:
+
+| Line | At | Over |
+|---|---|---|
+| "Dale has run this store for thirty-one years." | 1.0s | alone behind the counter |
+| "He can find anything in here with his eyes shut." | 5.2s | the shopper walking past |
+| "Nobody knows that." / "Because nobody's told them." | 9.0 / 10.2s | watching the rival's ad |
+| "So he tried telling them himself." | 19.0s | 11pm, two-finger typing |
+| "Then he tried telling them properly." | 46.9s | lands as the clean shirt appears |
+| "Turns out nobody wants properly." | 54.3s | before Carol's "It's fine." |
+| "They want him." | 64.8s | Dale alone in the dark aisle |
+| "You've already done the hard part." | 74.4s | the pronoun turn, just before Carol speaks |
+| "We'll do the rest." | 97.8s | the hammer mounted on the wall |
+
+Dale's flat false-fix line was nudged 48.8s -> 49.2s so the VO clears it.
+
+VO and dialogue are summed into one voice bus that drives the sidechain, so the
+bed and music duck for **any** voice rather than dialogue alone. Master at
+-14 LUFS, -1 dBTP.
+
+**`THE_COMMERCIAL_v4.mp4` - 1:46.71**, ending on a silent serviceaihq.com card.
+
