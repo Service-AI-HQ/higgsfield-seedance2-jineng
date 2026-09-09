@@ -69,3 +69,46 @@ No collisions with the existing dialogue (Miles at 20.6, the KINDA exchange at
 **Same seed — `20260812` — as THE COMMERCIAL's VO.** That is what holds the
 voice across both films. One 30s Seedance 2.5 take, all nine lines in a single
 continuous read, 1,810 credits.
+
+---
+
+# Status — submitted, connector removed before collection
+
+- **historyId** `YV4HcH89ND4rvKvdBCer`
+- Seedance 2.5, text2video, 30s, 9:16, 480p, `generateAudio: true`, **seed `20260812`**
+- ~1,810 credits
+
+Submitted successfully and confirmed RUNNING. When the scheduled pickup fired,
+the OpenArt MCP server was reported **removed from the configuration** — a
+stronger state than the disconnects seen earlier, and one this session cannot
+recover from on its own. The render is in the account history regardless.
+
+## Everything else is finished
+
+The picture is rebuilt and staged at `scratchpad/looksdry/cut3/`:
+
+- **all 22 native audio tracks stripped** — LOOKS DRY carried the same
+  invented-dialogue defect as THE COMMERCIAL, in 16 of its clips
+- six synthesised location beds: bakery kitchen at 4am (oven hum), shop front,
+  a busier variant of that room for the queue, car interior, domestic kitchen,
+  exterior night
+- the same warm chord pad as THE COMMERCIAL, so the two films share a sound
+- alarm and stamp foley
+- the identical `serviceaihq.com` end card
+
+Timeline is 96.0s before the card.
+
+## One command finishes it
+
+```
+python3 tools/finish_looksdry.py <url-or-local-file>
+```
+
+Takes the render as a URL or a path. It verifies before cutting and **refuses to
+proceed** on any of three failures: wrong number of spoken lines, a median F0
+more than 15 Hz from THE COMMERCIAL's 105.5 (which would break the campaign
+voice), or an audible noise floor between lines. Then it splits the nine lines
+and reports ready to cut.
+
+The guard matters more than the convenience — a mismatched voice across two
+films is worse than one film with no narration.
