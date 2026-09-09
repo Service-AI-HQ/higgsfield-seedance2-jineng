@@ -112,3 +112,32 @@ and reports ready to cut.
 
 The guard matters more than the convenience — a mismatched voice across two
 films is worse than one film with no narration.
+
+---
+
+# Both generation routes down — v3 shipped without narration
+
+- **OpenArt** — connector removed from the session configuration.
+- **Higgsfield** — account now reports **free plan, 0 credits** (was Ultra with
+  1,472 earlier the same night). Workspace correctly selected; the balance
+  itself changed.
+
+With no generation route, `LOOKS_DRY_v3.mp4` ships **without the VO**: 1:40, all
+22 native tracks stripped, six synthesised location beds, music entering on the
+laugh, alarm and stamp foley, dialogue ducked under a voice-driven sidechain,
+mastered to -14 LUFS, ending on the silent serviceaihq.com card.
+
+The audio defect is fixed. What is missing is the argument — without narration
+this is a well-cut short film rather than a commercial, exactly the gap
+identified earlier.
+
+## To finish it
+
+The narration is already rendered and paid for on OpenArt as job
+`YV4HcH89ND4rvKvdBCer`. A direct file URL is all that is needed:
+
+```
+python3 tools/finish_looksdry.py <url-or-local-file>
+```
+
+Nothing else about the film needs to change.
