@@ -141,3 +141,50 @@ python3 tools/finish_looksdry.py <url-or-local-file>
 ```
 
 Nothing else about the film needs to change.
+
+---
+
+# COLLECTED AND CUT — `LOOKS_DRY_v4.mp4`, 1:40
+
+OpenArt reattached and `YV4HcH89ND4rvKvdBCer` came back COMPLETED. Verified
+against the campaign before a frame was cut:
+
+| Check | Result | Verdict |
+|---|---|---|
+| Median F0 | **100.6 Hz** | 4.9 Hz from THE COMMERCIAL's 105.5 — same voice |
+| Noise floor between lines | **-61.6 dBFS** | no booth ambience printed in |
+| Speech segments | 11 raw | see below |
+
+## The 11-into-9 trap
+
+The splitter found **11** segments for 9 scripted lines and the guard let it
+through on count alone. It was right to pass and wrong to number them 1-10:
+two lines carry an internal full stop, and the model performed both pauses long
+enough to read as line breaks.
+
+| Group | Segments | Dur | Line |
+|---|---|---|---|
+| 1 | 1+2 | 3.78s | "Renée is up at four. **/** Nobody asked her to be." |
+| 7 | 8+9 | 3.25s | "People don't buy the photo. **/** They buy her." |
+
+Every other group is 1:1. The grouping is confirmed by duration against syllable
+count on all nine, and the naive numbering would have shipped line 1 truncated
+to "Renée is up at four." and **dropped line 9 entirely** — the 11th segment fell
+off the end of a 10-name list.
+
+`tools/cut_looksdry_v4.py` encodes the correct grouping and re-asserts that no
+narration line overlaps a scene dialogue take before it will cut.
+
+## Placement — all nine land on their intended shot
+
+| Line | At | Shot |
+|---|---|---|
+| 1 | 1.0 | 1 — the alarm |
+| 2 | 8.5 | 3 — laminating |
+| 3 | 24.0 | 7 — three likes |
+| 4 | 27.5 | 8 — the comment |
+| 5 | 49.0 | 12 — the false fix |
+| 6 | 54.0 | 13 — the crate |
+| 7 | 64.0 | 15 — the laugh, where music enters |
+| 8 | 77.5 | 18 — the queue |
+| 9 | 92.5 | 21 — the sign lit at night |

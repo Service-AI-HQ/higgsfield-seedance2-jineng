@@ -233,3 +233,58 @@ carry no risk of a model hallucinating a voice into them.
 **Always set `generate_audio: false`.** Native audio is unusable in a film with
 its own dialogue — it will invent competing performances. Design sound in the
 edit, where it can be controlled.
+
+---
+
+# THE TRUNCATED TAIL — both films shipped silent under their final shot
+
+Found while cutting LOOKS DRY's narration, and it was already in **both**
+delivered masters.
+
+`sidechaincompress` ends when **either** input ends — not when the main input
+ends. The voice bus stops on the last spoken word, so it took the bed and the
+music down with it:
+
+| Film | Picture content | Audio ended | Silent for |
+|---|---|---|---|
+| THE COMMERCIAL v4 | 102.70s | **98.79s** | 3.91s |
+| LOOKS DRY v3 | 96.00s | **89.64s** | 6.36s |
+
+Both films therefore went dead quiet across their final shot — the hammer on the
+wall, the sign lit at night — and the music cue never resolved. It is the one
+place in each film where the score is doing the most work, and there was nothing
+there. The endcard silence that follows is deliberate; this was not.
+
+It hid because every check had been run on the *mix*, never on the *duration*.
+Level, ducking and loudness all measured fine over the audio that existed.
+
+## Fix
+
+`apad` the sidechain key so the bed governs the length, or verify the audio
+stream length against the picture length after every mix. `tools/fix_tail.py`
+does the repair on the delivered masters: it keeps the approved mix untouched up
+to the truncation point, rebuilds the missing tail from the same bed and music
+components, and calibrates the tail's gain against the master over a **voice-free**
+window so the splice is inaudible.
+
+Getting that window wrong is the trap — the first calibration pass caught the
+last dialogue take inside it and came out 5-10 dB hot.
+
+## Two mastering bugs found in the same pass
+
+1. **Single-pass `loudnorm` is dynamic** and drifted as soon as the tail changed.
+   Replaced with a measured two-pass `linear=true` normalisation.
+2. **`alimiter` auto-levels by default** (`level` is enabled), which renormalises
+   the peak *up* to the limit and undoes the normalisation that just ran. That is
+   why targeting -14 LUFS / -1 dBTP kept producing -13.2 LUFS / 0.0 dBFS.
+   `alimiter=limit=0.84:level=disabled` is the correct form.
+
+## Delivered
+
+| File | Length | Integrated | True peak |
+|---|---|---|---|
+| `THE_COMMERCIAL_v5.mp4` | 1:46.80 | -14.0 LUFS | -1.4 dBTP |
+| `LOOKS_DRY_v4.mp4` | 1:40.00 | -14.3 LUFS | -1.2 dBTP |
+
+Both now carry sound across the whole picture and resolve the cue into the
+silent serviceaihq.com card.
