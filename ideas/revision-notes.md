@@ -288,3 +288,77 @@ last dialogue take inside it and came out 5-10 dB hot.
 
 Both now carry sound across the whole picture and resolve the cue into the
 silent serviceaihq.com card.
+
+---
+
+# WHY THE AUDIO STILL SOUNDED WRONG — I built it out of nothing
+
+"Rebuilt the soundtrack for zero credits" was the wrong thing to be proud of.
+Measured, here is what I had actually made:
+
+| Element | Measurement | What that means |
+|---|---|---|
+| Music | flatness 0.0000, **99.9%** of energy in 30 bins, nothing above **196 Hz** | Three bare sine waves at 131/165/196 Hz. Not music — a test tone, sitting in the same range as the fluorescent hum, so the cue's arrival read as the buzz getting louder |
+| Beds | level std **0.3–1.0 dB** | Steady-state noise with no events. My "rain" varied 1.0 dB across 30s; real rain varies **25.9 dB** |
+| Narration | rolloff **2.1 kHz**, 0.13% energy >5 kHz | Below telephone bandwidth (a landline reaches 3.4 kHz) — and it carried the entire sales argument |
+| Dialogue | rolloff **1523 Hz to 11273 Hz** | An 8x spread between two characters in the same room. The ear reads that as badly glued-together recordings |
+
+Carol's "Put the hammer one on" — the turn of the whole film — was a 1898 Hz take.
+
+## What fixed it
+
+**OpenArt has no audio model.** Every model in its catalogue is image or video;
+audio only ever arrives bundled inside a video generation, which is exactly how
+the narration ended up at 2.1 kHz. It cannot produce a cue or a clean voice.
+
+**Adobe Stock can**, and its audio library is free-tier. Licensed and used:
+
+| Asset | Use |
+|---|---|
+| Inspiration for Piano (romantic documentary background) | the cue, both films — a shared sound is the campaign |
+| Kitchen Ambience Professional or Commercial | bakery kitchen, kitchen-night |
+| Heavy Rain On Parked Car Int | the rainy car park |
+| Coffee Shop Interior Light Restaurant Walla | the queue, the crowd |
+| School Hallway Quiet Distant Footsteps | quiet shop interiors |
+| Empty Warehouse Interior Night | store-night, car, home, exterior night (separated by EQ) |
+
+The per-shot location map was never written down, so it was **recovered by
+spectral fingerprinting** every `b##.wav` against the six source beds — 0.96 to
+0.999 confidence. Voice placements were recovered the same way, by correlating
+each take against the finished master: 11 of 13 confirmed to 0.01s.
+
+**The voices were repaired, not re-recorded.** Adobe's speech enhancer is the
+right tool but its async result is unreachable in a headless session. Instead
+the missing top end is synthesised from the harmonics still present, and each
+take is driven until its high/low band ratio matches the naturally-bright takes
+in the same film (0.14). Narration went 2156 -> 7266 Hz, ratio 0.0021 -> 0.1448;
+every voice now lands within 0.138-0.145 instead of spanning 0.0002-0.22.
+
+## Three mixing lessons, all measured
+
+1. **Dynamic `loudnorm` lifts quiet passages.** It reached -14 LUFS by raising
+   the room tone ~10 dB, leaving dialogue only 5 dB above ambience. Linear mode
+   preserves the balance at the cost of ~2 LU. Balance wins.
+2. **`alimiter` auto-levels by default** — `level` enabled renormalises the peak
+   back up to the limit, undoing the normalisation that just ran.
+3. **-14 LUFS is not free.** With honest dynamic range it costs 4-7 dB of peak
+   limiting. Shipped at -15.9/-16.4 LUFS with dialogue **+15.6 to +20.2 dB over
+   room tone**, which is the professional range. Platforms normalise anyway.
+
+## Delivered
+
+| File | Length | Integrated | True peak | Dialogue over room |
+|---|---|---|---|---|
+| `THE_COMMERCIAL_v6.mp4` | 1:46.80 | -15.9 LUFS | -1.5 dBTP | +15.6 to +18.0 dB |
+| `LOOKS_DRY_v5.mp4` | 1:40.00 | -16.4 LUFS | -1.5 dBTP | +18.8 to +20.2 dB |
+
+## Still outstanding
+
+- **Both masters are mono.** The stock beds are stereo and the pipeline
+  collapsed them; stereo ambience is a real width gain still on the table.
+- **Dialogue is still dubbed, not lip-synced.** Seedance accepts
+  `audio_references` — generate the line first, pass it in, and the model syncs
+  to the actual take.
+- **The narration is repaired, not performed.** Band extension cannot invent a
+  read. A real TTS pass is the only way to fix delivery, and it also unlocks the
+  3-variants-per-line direction both films still want.
